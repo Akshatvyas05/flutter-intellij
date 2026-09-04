@@ -14,6 +14,7 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ApplicationNamesInfo;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -121,6 +122,10 @@ public class FlutterSdkUtil {
 
       // After the slow operation is complete, switch back to the EDT to update the UI.
       OpenApiUtils.safeInvokeLater(() -> {
+        if (!combo.isDisplayable()) {
+          return;
+        }
+
         // This code runs on the EDT.
         final Object currentEditorItem = combo.getEditor().getItem();
         final String activePath = currentEditorItem != null ? currentEditorItem.toString().trim() : "";
@@ -143,7 +148,7 @@ public class FlutterSdkUtil {
         else if (combo.getSelectedIndex() == -1 && combo.getItemCount() > 0) {
           combo.setSelectedIndex(0);
         }
-      });
+      }, ModalityState.any());
     });
   }
 
