@@ -122,10 +122,6 @@ public class FlutterSdkUtil {
 
       // After the slow operation is complete, switch back to the EDT to update the UI.
       OpenApiUtils.safeInvokeLater(() -> {
-        if (!combo.isDisplayable()) {
-          return;
-        }
-
         // This code runs on the EDT.
         final Object currentEditorItem = combo.getEditor().getItem();
         final String activePath = currentEditorItem != null ? currentEditorItem.toString().trim() : "";
